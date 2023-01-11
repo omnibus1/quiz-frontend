@@ -6,7 +6,9 @@ var UserProfile = (function() {
     };
   
     var setName = function(name) {
-      full_name = name;     
+
+      full_name = name;
+      localStorage.setItem("Username",name)     
       // Also set this in cookie/localStorage
     };
   

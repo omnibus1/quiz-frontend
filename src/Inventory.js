@@ -10,6 +10,7 @@ const Inventory = () => {
     const [equippedWeapons,setEquippedWeapons]=useState([])
     const {id}=useParams()
     UserProfile.setName(id);
+    const [requested,setRequested]=useState(false)
       useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_equipped/"+UserProfile.getName())
         .then(res=>{
@@ -20,7 +21,7 @@ const Inventory = () => {
             setEquippedWeapons(data.itemesEquipped)
             
         })
-    },[])
+    },[requested])
     useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_vault/"+UserProfile.getName())
         .then(res=>{
@@ -31,24 +32,74 @@ const Inventory = () => {
             setVaultWeapon(data.itemsInventory)
             
         })
+    },[requested])
+    useEffect(()=>{
+        console.log("run")
     },[])
+    const [hover, setHover] = useState({})
+
+    const mouseOver = (event, index) => {
+        setHover(c => {
+            return {
+                ...c,
+                [index]: true
+            };
+        })
+    }
+
+    const mouseOut = (event, index) => {
+        setHover(c => {
+            return {
+                ...c,
+                [index]: false
+            };
+        })
+    }
+    const [data, setData] = useState({data: []});
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
+
+    const handleClick = async (link) => {
+        setIsLoading(true);
+    
+        try {
+          const response = await fetch(link);
+            console.log(link)
+            setRequested(!requested)
+          if (!response.ok) {
+            throw new Error(`Error! status: ${response.status}`);
+          }
+    
+          const result = await response.json();
+    
+          console.log('result is: ', JSON.stringify(result, null, 4));
+    
+          setData(result);
+        } catch (err) {
+          setErr(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
     return ( 
         <div className="Inventory">
                
             <div className='"float-container' style={{padding:"20px"}}>
                 <div className='Equipped' style ={{float:"left",width:"50%"}}>
                     <h1>Equipped Items</h1>
-                {equippedWeapons.map(weapon=>(
+                {equippedWeapons.map((weapon,index)=>(
                     
-                        <div className='itemEquipped' key={weapon.itemHash} style={{ backgroundImage: "url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border:"3px solid green",margin:"5px"}}></div>
+                        <button className='itemEquippedLoadout'  onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onClick={()=>handleClick(weapon.unequip_item_link)} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
                     ))}
                 </div>
                 <div className='Vault'style={{float:"left", width:"50%"}}>
                     <h1>Items in the vault</h1>
-                    {valutWeapons.map(weapon=>(
-                        <div className='itemVault' key={weapon.itemHash} style={{ backgroundImage: "url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border:"3px solid red",margin:"5px"}}></div>
+                    {valutWeapons.map((weapon,index)=>(
+                        <button className='itemInventory'  onClick={()=>handleClick(weapon.equip_item_link)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid red":"3px solid green",margin:"5px"}}></button>
                     ))}
                 </div>
+                
             </div>
         </div>
         
