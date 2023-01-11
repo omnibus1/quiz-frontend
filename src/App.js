@@ -1,7 +1,7 @@
 
 import Navbar from './Navbar';
 import Inventory from './Inventory';
-import Home from './Home';
+import About from './About';
 import Login from './Login';
 import Loadouts from './Loadouts';
 import UserDetail from './UserDetail';
@@ -16,8 +16,8 @@ function App() {
       <div className="content">
         <Switch>
         <Route exact path="/">
-          
-            <Home/>
+            <Navbar/>
+            <About/>
           </Route>
           <Route exact path="/loadouts/:id">
             <Navbar/>
