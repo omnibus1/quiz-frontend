@@ -1,11 +1,14 @@
 import {useEffect, useState,useSearchParams,} from 'react'
 import {Routes, Route,useHistory } from 'react-router-dom';
 import UserProfile from './UserProfile'
+
 const CL = () => {
     const[allItems,setAllItems]=useState([])
     const[loadoutItems,setLoadoutItems]=useState([])
     const [loadoutName,setLoadoutName]=useState("")
     const history = useHistory ();
+    const [popUp, setPopUp] = useState(false)
+    const duringPopUp = popUp ? " during-popup" : ""
     useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_items/"+localStorage.getItem("Username"))
         .then(res=>{
@@ -64,8 +67,13 @@ const CL = () => {
         })
         sumString=sumString.slice(0,-1)
         sumString+="/"
-        sumString+=loadoutName
-        console.log(sumString)
+        let x=loadoutName.replace(/\s+/g,'_')
+        console.log(x+"x")
+        setLoadoutName(x)
+        
+        console.log(loadoutName,"123")
+        sumString+=x
+        console.log("https://ioprojekt.pythonanywhere.com/api/create_loadout/"+localStorage.getItem("Username")+"/"+sumString)
         fetch("https://ioprojekt.pythonanywhere.com/api/create_loadout/"+localStorage.getItem("Username")+"/"+sumString)
         history.push("/loadouts/"+localStorage.getItem("Username"))
         }
@@ -86,17 +94,17 @@ const CL = () => {
             
             {loadoutItems.map((weapon,index)=>(
                     
-                     <button className='itemEquipped'  onClick={()=>handleClickOnItemLoadout(weapon)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}}  onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
+                     <button className='itemEquipped'  onClick={()=>handleClickOnItemLoadout(weapon)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}}  onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
                 ))}
                 </div>
                 <div className="submitButton">
                     
-                <button onClick={()=>handleClickCreate()} style={{backgroundColor:"orange",fontSize:"2em",border:"2px solid black",padding:"10px 20px",textDecoration:"none"}} className='createLoadoutButton' >CREATE LOADOUT</button>
+                <button disabled={!loadoutName||loadoutItems}  onClick={()=>handleClickCreate()} style={{backgroundColor:"orange",fontSize:"2em",border:"2px solid black",padding:"10px 20px",textDecoration:"none"}} className='createLoadoutButton' >CREATE LOADOUT</button>
                 </div>
                 <div className="userItems">
                 
                 {allItems.map((weapon,index)=>(
-                     <button className='itemEquipped'  onClick={()=>handleClickOnItem(weapon)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}}  onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
+                     <button className='itemEquipped'  onClick={()=>handleClickOnItem(weapon)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}}  onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
                 ))}
                 </div>
         </div>

@@ -7,6 +7,7 @@ import Loadouts from './Loadouts';
 import UserDetail from './UserDetail';
 import CL from './createLoadout';
 import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
+import Profile from './Profile';
 function App() {
   const userName="omniubs"
   return (
@@ -34,6 +35,11 @@ function App() {
             <Navbar/>
             <CL/>
           </Route>
+          <Route exact path="/profile/:id">
+          <Navbar/>
+            <Profile/>
+          </Route>
+          
         </Switch>
       </div>
     </div>

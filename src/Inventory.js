@@ -90,13 +90,13 @@ const Inventory = () => {
                     <h1>Equipped Items</h1>
                 {equippedWeapons.map((weapon,index)=>(
                     
-                        <button className='itemEquippedLoadout'  onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onClick={()=>handleClick(weapon.unequip_item_link)} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
+                        <button className='itemEquippedLoadout'  onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onClick={()=>handleClick(weapon.unequip_item_link)} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
                     ))}
                 </div>
                 <div className='Vault'style={{float:"left", width:"50%"}}>
                     <h1>Items in the vault</h1>
                     {valutWeapons.map((weapon,index)=>(
-                        <button className='itemInventory'  onClick={()=>handleClick(weapon.equip_item_link)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage: !hover[weapon.itemHash] ? "url(" + weapon.iconLink + ")":"red",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid red":"3px solid green",margin:"5px"}}></button>
+                        <button className='itemInventory'  onClick={()=>handleClick(weapon.equip_item_link)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid red":"3px solid green",margin:"5px"}}></button>
                     ))}
                 </div>
                 
