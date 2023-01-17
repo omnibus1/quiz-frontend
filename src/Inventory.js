@@ -3,14 +3,19 @@ import {useEffect, useState,useSearchParams} from 'react'
 import {useLocation} from "react-router-dom";
 import {useParams} from 'react-router-dom'
 import UserProfile from './UserProfile';
+ /*
+This file renders the inventory page of a user
+ */
 const Inventory = () => {
     const search = useLocation().search;
-    const name = new URLSearchParams(search).get('name');
     const [valutWeapons,setVaultWeapon]=useState([]);
     const [equippedWeapons,setEquippedWeapons]=useState([])
     const {id}=useParams()
     UserProfile.setName(id);
     const [requested,setRequested]=useState(false)
+ /*
+Fetch used to get the users currently equipped items
+ */
       useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_equipped/"+UserProfile.getName())
         .then(res=>{
@@ -22,6 +27,9 @@ const Inventory = () => {
             
         })
     },[requested])
+ /*
+Fetch used to grap the users items from the inventory
+ */
     useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_vault/"+UserProfile.getName())
         .then(res=>{
@@ -34,10 +42,12 @@ const Inventory = () => {
         })
     },[requested])
     useEffect(()=>{
-        console.log("run")
+
     },[])
     const [hover, setHover] = useState({})
-
+ /*
+Basic hover map to highlight currently hovered item
+ */
     const mouseOver = (event, index) => {
         setHover(c => {
             return {
@@ -46,7 +56,6 @@ const Inventory = () => {
             };
         })
     }
-
     const mouseOut = (event, index) => {
         setHover(c => {
             return {
@@ -58,7 +67,9 @@ const Inventory = () => {
     const [data, setData] = useState({data: []});
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
-
+ /*
+Function used to interact with the api to send requests to equip or unequip items that have been clicked
+ */
     const handleClick = async (link) => {
         setIsLoading(true);
     
@@ -86,17 +97,19 @@ const Inventory = () => {
         <div className="Inventory">
                
             <div className='"float-container' style={{padding:"20px"}}>
-                <div className='Equipped' style ={{float:"left",width:"50%"}}>
-                    <h1>Equipped Items</h1>
+                <div className='Equipped' style ={{float:"left",width:"40%"}}>
+                    <h1>Equipped Items:</h1>
+                    <div className='colorme'>
                 {equippedWeapons.map((weapon,index)=>(
                     
-                        <button className='itemEquippedLoadout'  onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onClick={()=>handleClick(weapon.unequip_item_link)} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid green":"3px solid red",margin:"5px"}}></button>
+                        <button className='itemEquippedLoadout'  onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onClick={()=>handleClick(weapon.unequip_item_link)} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"5px solid #80475E":"5px solid #203669",margin:"5px"}}></button>
                     ))}
                 </div>
-                <div className='Vault'style={{float:"left", width:"50%"}}>
-                    <h1>Items in the vault</h1>
+                </div>
+                <div className='Vault'style={{float:"left", width:"40%"}}>
+                    <h1>Items in the vault:</h1>
                     {valutWeapons.map((weapon,index)=>(
-                        <button className='itemInventory'  onClick={()=>handleClick(weapon.equip_item_link)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"3px solid red":"3px solid green",margin:"5px"}}></button>
+                        <button className='itemInventory'  onClick={()=>handleClick(weapon.equip_item_link)} onMouseEnter={(e)=>{mouseOver(e,weapon.itemHash)}} onMouseLeave={(e)=>{mouseOut(e,weapon.itemHash)}} key={index} style={{ backgroundImage:"url(" + weapon.iconLink + ")",display:"block",float:"left",width:"96px",height:"96px",border: !hover[weapon.itemHash] ?"5px solid #00A6ED":"5px solid #F8F272",margin:"5px"}}></button>
                     ))}
                 </div>
                 

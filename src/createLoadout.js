@@ -1,14 +1,20 @@
 import {useEffect, useState,useSearchParams,} from 'react'
 import {Routes, Route,useHistory } from 'react-router-dom';
 import UserProfile from './UserProfile'
-
+ /*
+create loadout page, used to create loadouts, 
+ */
 const CL = () => {
     const[allItems,setAllItems]=useState([])
     const[loadoutItems,setLoadoutItems]=useState([])
     const [loadoutName,setLoadoutName]=useState("")
     const history = useHistory ();
-    const [popUp, setPopUp] = useState(false)
-    const duringPopUp = popUp ? " during-popup" : ""
+    function timeout(delay) {
+        return new Promise( res => setTimeout(res, delay) );
+    }
+ /*
+Fetches all the items the user has
+ */
     useEffect(()=>{
         fetch("https://ioprojekt.pythonanywhere.com/api/get_player_items/"+localStorage.getItem("Username"))
         .then(res=>{
@@ -21,7 +27,9 @@ const CL = () => {
         })
     },[])
     const [hover, setHover] = useState({})
-
+ /*
+Basic mouse over to highlight currently hovered item
+ */
     const mouseOver = (event, index) => {
         setHover(c => {
             return {
@@ -31,7 +39,9 @@ const CL = () => {
         })
     }
 
-
+ /*
+Basic mouse over to unhighlight currently hovered item
+ */
     const mouseOut = (event, index) => {
         setHover(c => {
             return {
@@ -40,12 +50,14 @@ const CL = () => {
             };
         })
     }
+/*
+Handle moving the items from the eq to a desired loadout
+ */
     const handleClickOnItem=(weapon) => {
         console.log(weapon.itemHash);
         setAllItems(allItems.filter(item=>item.itemHash!==weapon.itemHash))
         setLoadoutItems(loadoutItems.concat(weapon))
-        console.log("loadoutItems:")
-        console.log(loadoutItems)
+
         
     }
     const handleClickOnItemLoadout=(weapon) => {
@@ -57,24 +69,37 @@ const CL = () => {
         
         
     }
+    const fib=(n)=>{
+        if(n===1||n===0){
+            return n
+        }
+        return fib(n-1)+fib(n-2)
+        
+    }
+/*
+Upon clicking sets a request to the api to create a loadout, and redirects to the loadout page
+ */
     const handleClickCreate=()=>{
         console.log("asdasdad")
         let sumString=""
         loadoutItems.forEach((weapon)=>{
             
             sumString+=weapon.itemHash
-            sumString+="a"
+            sumString+="_"
         })
         sumString=sumString.slice(0,-1)
         sumString+="/"
         let x=loadoutName.replace(/\s+/g,'_')
-        console.log(x+"x")
+
         setLoadoutName(x)
         
-        console.log(loadoutName,"123")
+
         sumString+=x
-        console.log("https://ioprojekt.pythonanywhere.com/api/create_loadout/"+localStorage.getItem("Username")+"/"+sumString)
+
         fetch("https://ioprojekt.pythonanywhere.com/api/create_loadout/"+localStorage.getItem("Username")+"/"+sumString)
+        let i=0
+        //delay function 
+        let w=fib(25)
         history.push("/loadouts/"+localStorage.getItem("Username"))
         }
     const handleChange=(event)=>{
@@ -99,7 +124,7 @@ const CL = () => {
                 </div>
                 <div className="submitButton">
                     
-                <button disabled={!loadoutName||loadoutItems}  onClick={()=>handleClickCreate()} style={{backgroundColor:"orange",fontSize:"2em",border:"2px solid black",padding:"10px 20px",textDecoration:"none"}} className='createLoadoutButton' >CREATE LOADOUT</button>
+                <button disabled={!loadoutName&&loadoutItems}  onClick={()=>handleClickCreate()} style={{backgroundColor:(!loadoutName&&loadoutItems) ?"grey":"#FAC748",fontSize:"2em",border:"2px solid black",padding:"10px 20px",textDecoration:"none"}} className='createLoadoutButton' >CREATE LOADOUT</button>
                 </div>
                 <div className="userItems">
                 

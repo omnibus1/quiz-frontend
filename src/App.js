@@ -4,7 +4,7 @@ import Inventory from './Inventory';
 import About from './About';
 import Login from './Login';
 import Loadouts from './Loadouts';
-import UserDetail from './UserDetail';
+
 import CL from './createLoadout';
 import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
 import Profile from './Profile';
@@ -17,8 +17,7 @@ function App() {
       <div className="content">
         <Switch>
         <Route exact path="/">
-            <Navbar/>
-            <About/>
+          <Login/>
           </Route>
           <Route exact path="/loadouts/:id">
             <Navbar/>
@@ -28,8 +27,9 @@ function App() {
           <Navbar/>
             <Inventory/>
           </Route>
-          <Route exact path="/login">
-            <Login/>
+          <Route exact path="/about">
+            <Navbar/>
+            <About/>
           </Route>
           <Route exact path="/create_loadout/:id">
             <Navbar/>

@@ -1,3 +1,6 @@
+ /*
+ Simple static about page, containig some text
+ */
  const About = () => {
     return ( 
         <div className="home">
@@ -10,6 +13,7 @@
 
 
             </h1>
+
             
         </div>
      );
