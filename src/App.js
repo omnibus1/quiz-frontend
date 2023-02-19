@@ -1,14 +1,15 @@
 
 
-import Login from './Login';
-import Quiz from './Quiz';
+
+import Home from './Home';
+import Quiz from './QuizRender';
 
 
 
 import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
 
 function App() {
-  const userName="omniubs"
+  
   return (
     <Router>
     <div className="App">
@@ -16,11 +17,11 @@ function App() {
       <div className="content">
         <Switch>
         <Route exact path="/">
-          <Login/>
+          <Home/>
           </Route>          
         </Switch>
         <Switch>
-        <Route exact path="/quiz">
+        <Route exact path="/quiz/:id">
           <Quiz/>
           </Route>          
         </Switch>
